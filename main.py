@@ -3,7 +3,17 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
 from mesa import Mesa
 from time import sleep
+from winotify import Notification, audio
 import constantes
+
+def notificar(mesa: Mesa, entrada: str):
+  notificacao = Notification(app_id="Bot BetFair", 
+                             title="Entrada Encontrada", 
+                             msg="Mesa: " + mesa.nome + "\nEntrada: " + entrada,
+                             duration="long")
+  notificacao.set_audio(audio.Default, loop="False")
+  notificacao.show()
+
 
 def criarMesas(navegador: ChromeDriverManager):
   div_roletas = navegador.find_element('xpath', '//*[@id="root"]/div/div[3]/div[1]/div[1]/div[2]/div/div/div[1]/div/div/div[1]/div/div/div[2]/div[1]')
@@ -28,6 +38,6 @@ navegador.find_element('xpath', '//*[@id="root"]/div/div[3]/div[1]/div/div[1]/di
 sleep(5)
 navegador.find_element('xpath', '//*[@id="root"]/div/div[3]/div[1]/div[1]/div[1]/div/div[2]/div[2]/div/div/div/div[5]').click()
 sleep(10)
-
+notificar(Mesa("teste",[],""),"Função feita corretamente")
 while True:
-  print(1)
+  print(navegador.find_element('xpath','//*[@id="root"]/div/div[3]/div[1]/div[1]/div[2]/div/div/div[1]/div/div/div[13]/div/div/div[1]/div/div[3]/div[2]/div/div[1]/div/div'))
