@@ -1,67 +1,75 @@
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import StaleElementReferenceException, NoSuchElementException
 from mesa import Mesa
 from time import sleep
-from winotify import Notification, audio
 import constantes
 
-def notificar(mesa: Mesa, entrada: str):
-  notificacao = Notification(app_id="Bot BetFair", 
-                             title="Entrada Encontrada", 
-                             msg="Mesa: " + mesa.nome + "\nEntrada: " + entrada,
-                             duration="long")
-  notificacao.set_audio(audio.Default, loop="False")
-  notificacao.show()
 
 def criarMesas(navegador: ChromeDriverManager):
   global mesas
   contador = 0
-  total_de_resultados_anteriores = navegador.find_elements(By.CLASS_NAME, 'roulette-history-item__value-text--siwxW')
-  # print(len(total_de_resultados_anteriores))
-  nomes_das_mesas = navegador.find_elements(By.CLASS_NAME, 'table-footer__name--BJPlO')
-  nomes_dos_croupier = navegador.find_elements(By.CLASS_NAME, 'table__dealer-name-text--uO9ri')
+  # WebDriverWait(navegador, 120).until(EC.presence_of_element_located((By.CLASS_NAME, 'roulette-history-item__value-text--siwxW')))
+  total_de_resultados_anteriores = [div.text for div in navegador.find_elements(By.CLASS_NAME, 'roulette-history-item__value-text--siwxW')]
+  nomes_das_mesas =  [div.text for div in navegador.find_elements(By.CLASS_NAME, 'table-footer__name--BJPlO')]
+  nomes_dos_croupier = [div.text for div in navegador.find_elements(By.CLASS_NAME, 'table__dealer-name-text--uO9ri')]
   resultados = []
+
   for resultados_passados in total_de_resultados_anteriores:
-    # print(resultados_passados.text)
-    # if(resultados_passados.text is not None):
-    resultados.append(resultados_passados.text)
+    resultados.append(resultados_passados)
     if(len(resultados) == 9):
-      # print(contador)
-      if("Auto Roulette" not in nomes_dos_croupier[contador].text and nomes_dos_croupier[contador].text != nomes_dos_croupier[contador-1].text):
-        mesas.append(Mesa(nomes_das_mesas[contador].text,resultados,nomes_dos_croupier[contador].text))
-        print(mesas[-1].__str__())
+      if("Auto Roulette" not in nomes_dos_croupier[contador] and nomes_dos_croupier[contador] != nomes_dos_croupier[contador-1]):
+        mesas.append(Mesa(nomes_das_mesas[contador],resultados,nomes_dos_croupier[contador]))
       contador += 1
       resultados = []
   print("Fim criação")
+
 
 def atualizarMesas(navegador: ChromeDriverManager):
   print("Incio atualizacao")
   global mesas
   contador = 0
-  total_de_resultados_anteriores = navegador.find_elements(By.CLASS_NAME, 'roulette-history-item__value-text--siwxW')
-  nomes_das_mesas = navegador.find_elements(By.CLASS_NAME, 'table-footer__name--BJPlO')
-  nomes_dos_croupier = navegador.find_elements(By.CLASS_NAME, 'table__dealer-name-text--uO9ri')
+  # WebDriverWait(navegador, 120).until(EC.presence_of_element_located((By.CLASS_NAME, 'roulette-history-item__value-text--siwxW')))
+  total_de_resultados_anteriores = [div.text for div in navegador.find_elements(By.CLASS_NAME, 'roulette-history-item__value-text--siwxW')]
+  nomes_das_mesas =  [div.text for div in navegador.find_elements(By.CLASS_NAME, 'table-footer__name--BJPlO')]
+  nomes_dos_croupier = [div.text for div in navegador.find_elements(By.CLASS_NAME, 'table__dealer-name-text--uO9ri')]
   resultados = []
+
   for resultados_passados in total_de_resultados_anteriores:
-    resultados.append(resultados_passados.text)
-    if(len(resultados) == 9):
-      # print(contador)
-      if("Auto Roulette" not in nomes_dos_croupier[contador].text and nomes_dos_croupier[contador].text != nomes_dos_croupier[contador-1].text):
-        for mesa in mesas:
-          if mesa.nome == nomes_das_mesas[contador].text:
-            mesa.ultimos_resultados.append(resultados[-1])
-            print(mesa.__str__())      
+    resultados.append(resultados_passados)
+    if(len(resultados) == 9 and "Auto Roulette" not in nomes_dos_croupier[contador] and nomes_dos_croupier[contador] != nomes_dos_croupier[contador-1]):
+      for mesa in mesas:
+        if mesa.nome == nomes_das_mesas[contador] and resultados[0] != mesa.ultimos_resultados[0]:
+          mesa.ultimos_resultados.insert(0, resultados[0])
+          print(mesa.__str__())      
       contador += 1
       resultados = []
 
-def atualizarOuCriarMesas(navegador: ChromeDriverManager):
-  if len(mesas) == 0:
-    criarMesas(navegador)
-  else:
-    atualizarMesas(navegador)
 
+def atualizarOuCriarMesas():
+  global navegador
+
+  try:
+    if len(mesas) == 0:
+      criarMesas(navegador)
+    else:
+      atualizarMesas(navegador)
+  except:
+    atualizarOuCriarMesas()
+
+
+def verificar_padroes():
+  global mesas
+
+  for mesa in mesas:
+    mesa.verificar_padrao()
+
+
+# variáveis
 mesas = []
 
 # Abrir o navegador
@@ -83,9 +91,8 @@ navegador.find_element('xpath', '//*[@id="root"]/div/div[3]/div[1]/div/div[1]/di
 sleep(5)
 navegador.find_element('xpath', '//*[@id="root"]/div/div[3]/div[1]/div[1]/div[1]/div/div[2]/div[2]/div/div/div/div[5]').click()
 sleep(10)
+
 while True:
-  # try:
-    atualizarOuCriarMesas(navegador)
-    sleep(30)
-  # except:
-  #   print(1)
+  atualizarOuCriarMesas()
+  sleep(3)
+  verificar_padroes()
