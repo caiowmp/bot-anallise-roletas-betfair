@@ -50,10 +50,6 @@ def atualizarOuCriarMesas():
   except:
     atualizarOuCriarMesas()
 
-# def atualizar_pagina():
-#   global navegador
-#   navegador.refresh()
-
 mesas = []
 
 servico = Service(ChromeDriverManager().install())
