@@ -57,6 +57,7 @@ class Mesa:
         if self.verificar_padrao_baixo():
             resultado += 'Números Baixos\n'
         if resultado != '':
+            print(self.__str__())
             self.notificar(resultado)
 
     def verificar_padrao_vermelho(self):
@@ -107,4 +108,5 @@ class Mesa:
                              msg="Mesa: " + self.nome + "\nEntrada: " + entrada,
                              duration="long")
         notificacao.set_audio(audio.Default, loop="False")
-        notificacao.show()         
+        notificacao.show()
+        self.ultimos_resultados = []        
