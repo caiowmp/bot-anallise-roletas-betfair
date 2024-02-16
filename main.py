@@ -73,7 +73,9 @@ def ir_para_roletas():
   sleep(10)
   navegador.find_element('xpath', '//*[@id="root"]/div/div[3]/div[1]/div[1]/div[1]/div/div[2]/div[2]/div/div/div/div[5]').click()
   sleep(10)
-
+  
+constantes.exibir_notificacao()
+print(constantes.QUANTIDADE_PADRAO)
 abrir_navegador()
 ir_para_login()
 fazer_login()
