@@ -75,7 +75,6 @@ def ir_para_roletas():
   sleep(10)
   
 constantes.exibir_notificacao()
-print(constantes.QUANTIDADE_PADRAO)
 abrir_navegador()
 ir_para_login()
 fazer_login()
