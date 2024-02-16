@@ -12,14 +12,10 @@ NUMEROS_PRETOS = [str(num) for num in [2,4,6,8,10,11,13,15,17,20,22,24,26,28,29,
 import tkinter as tk
 from tkinter import simpledialog
 
-# Função para exibir uma notificação com uma janela de entrada de texto
 def exibir_notificacao():
   global QUANTIDADE_PADRAO
   root = tk.Tk()
-  root.withdraw()  # Oculta a janela principal
-  root.option_add("*Font", "Arial 12")  # Altera a fonte para Arial tamanho 12
-  root.option_add("*Background", "#f0f0f0")  # Altera a cor de fundo para cinza claro
-  root.option_add("*Foreground", "#333333")
-  entrada = simpledialog.askstring("Notificação com Textbox", "Digite o texto da notificação:")
+  root.withdraw()
+  entrada = simpledialog.askstring("Bot BetFair", "Digite a quantidade de vezes que o padrão deve se repetir:")
   if entrada:
     QUANTIDADE_PADRAO = int(entrada)
