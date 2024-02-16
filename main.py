@@ -1,5 +1,3 @@
-from bs4 import BeautifulSoup
-import requests
 from selenium.webdriver.support import expected_conditions as EC
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
@@ -20,7 +18,6 @@ def criarMesas(navegador: webdriver.Chrome, nomes_das_mesas, nomes_dos_croupier)
       if("Auto Roulette" not in nomes_dos_croupier[contador] and nomes_dos_croupier[contador] != nomes_dos_croupier[contador-1]):
         mesas.append(Mesa(nomes_das_mesas[contador],resultados,nomes_dos_croupier[contador]))
         mesas[-1].verificar_padrao()
-        sleep(3)
       contador += 1
       resultados = []
 
@@ -36,7 +33,6 @@ def atualizarMesas(navegador: webdriver.Chrome, nomes_das_mesas, nomes_dos_croup
         if mesa.nome == nomes_das_mesas[contador] and resultados[0] != mesa.ultimos_resultados[0]:
           mesa.ultimos_resultados.insert(0, resultados[0])
           mesa.verificar_padrao()
-          sleep(3)
       contador += 1
       resultados = []
 

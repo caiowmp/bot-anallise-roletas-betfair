@@ -1,6 +1,4 @@
 from winotify import Notification, audio
-from win10toast import ToastNotifier
-from plyer import notification
 import constantes 
 
 class Mesa:
@@ -60,7 +58,6 @@ class Mesa:
         if self.verificar_padrao_baixo():
             resultado += 'Números Baixos\n'
         if resultado != '':
-            print("Notifiquei", self.__str__())
             self.notificar(resultado)
 
 
@@ -113,6 +110,7 @@ class Mesa:
                              duration="short")
         notificacao.set_audio(audio.Default, loop="False")
         notificacao.show()
+        # print("Notifiquei", self.__str__())
         self.ultimos_resultados = [-1]    
 
     # def notificar(self, entrada: str):
