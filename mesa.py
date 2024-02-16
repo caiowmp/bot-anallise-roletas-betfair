@@ -1,4 +1,6 @@
 from winotify import Notification, audio
+from win10toast import ToastNotifier
+from plyer import notification
 import constantes 
 
 class Mesa:
@@ -43,6 +45,7 @@ class Mesa:
         return f"Mesa: {self.nome}, Últimos Resultados: {self.ultimos_resultados}, Crupiê: {self.nome_crupie}"
 
     def verificar_padrao(self):
+        print("Verifiquei: ", self.__str__())
         resultado = ''
         if self.verificar_padrao_vermelho():
             resultado += 'Números Vermelhos\n'
@@ -57,8 +60,9 @@ class Mesa:
         if self.verificar_padrao_baixo():
             resultado += 'Números Baixos\n'
         if resultado != '':
-            print(self.__str__())
+            print("Notifiquei", self.__str__())
             self.notificar(resultado)
+
 
     def verificar_padrao_vermelho(self):
         contador = 0
@@ -106,7 +110,25 @@ class Mesa:
         notificacao = Notification(app_id="Bot BetFair", 
                              title="Entrada Encontrada", 
                              msg="Mesa: " + self.nome + "\nEntrada: " + entrada,
-                             duration="long")
+                             duration="short")
         notificacao.set_audio(audio.Default, loop="False")
         notificacao.show()
-        self.ultimos_resultados = []        
+        self.ultimos_resultados = [-1]    
+
+    # def notificar(self, entrada: str):
+    #     notificacao = ToastNotifier()
+    #     notificacao.show_toast("Entrada encontrada", 
+    #                            "Mesa: " + self.nome + "\nEntrada: " + entrada, 
+    #                            duration=10)
+    #     print("Notifiquei mesmo!", self.__str__())
+    #     self.ultimos_resultados = [-1]  
+
+    # def notificar(self, entrada: str):
+    #     notification.notify(
+    #         title="Entrada encontrada",
+    #         message="Mesa: " + self.nome + "\nEntrada: " + entrada, 
+    #         app_name="Bot BetFair", 
+    #         timeout=10, 
+    #     )
+    #     print("Notifiquei mesmo!", self.__str__())
+    #     self.ultimos_resultados = [-1]    
