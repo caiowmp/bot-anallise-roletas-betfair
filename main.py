@@ -11,28 +11,25 @@ def criarMesas(navegador: webdriver.Chrome, nomes_das_mesas, nomes_dos_croupier)
   contador = 0
   total_de_resultados_anteriores = [div.text for div in navegador.find_elements(By.CLASS_NAME, 'roulette-history-item__value-text--siwxW')]
   resultados = []
-
   for resultados_passados in total_de_resultados_anteriores:
     resultados.append(resultados_passados)
     if(len(resultados) == 9):
-      if("Auto Roulette" not in nomes_dos_croupier[contador] and nomes_dos_croupier[contador] != nomes_dos_croupier[contador-1]):
-        mesas.append(Mesa(nomes_das_mesas[contador],resultados,nomes_dos_croupier[contador]))
-        mesas[-1].verificar_padrao()
+      mesas.append(Mesa(nomes_das_mesas[contador],resultados,nomes_dos_croupier[contador]))
       contador += 1
       resultados = []
 
-def atualizarMesas(navegador: webdriver.Chrome, nomes_das_mesas, nomes_dos_croupier):
+def atualizarMesas(navegador: webdriver.Chrome, nomes_dos_croupier):
   contador = 0
   total_de_resultados_anteriores = [div.text for div in navegador.find_elements(By.CLASS_NAME, 'roulette-history-item__value-text--siwxW')]
   resultados = []
-
   for resultados_passados in total_de_resultados_anteriores:
     resultados.append(resultados_passados)
-    if(len(resultados) == 9 and "Auto Roulette" not in nomes_dos_croupier[contador] and nomes_dos_croupier[contador] != nomes_dos_croupier[contador-1]):
-      for mesa in mesas:
-        if mesa.nome == nomes_das_mesas[contador] and resultados[0] != mesa.ultimos_resultados[0]:
-          mesa.ultimos_resultados.insert(0, resultados[0])
-          mesa.verificar_padrao()
+    if(len(resultados) == 9): #and "Auto Roulette" not in nomes_dos_croupier[contador]): #and nomes_dos_croupier[contador] != nomes_dos_croupier[contador-1]):
+      for i in range(len(mesas)):
+        if resultados[0] != mesas[i].ultimos_resultados[0]:
+          mesas[i].ultimos_resultados.insert(0, resultados[0])
+        if(i == contador and "Auto Roulette" not in mesas[i].nome and nomes_dos_croupier[i] != nomes_dos_croupier[i-1]):
+          mesas[i].verificar_padrao()
       contador += 1
       resultados = []
 
@@ -44,7 +41,7 @@ def atualizarOuCriarMesas():
     if len(mesas) == 0:
       criarMesas(navegador,nomes_das_mesas,nomes_dos_croupier)
     else:
-      atualizarMesas(navegador,nomes_das_mesas,nomes_dos_croupier)
+      atualizarMesas(navegador, nomes_dos_croupier)
   except:
     navegador.refresh()
 
