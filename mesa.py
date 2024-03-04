@@ -43,7 +43,6 @@ class Mesa:
         return f"Mesa: {self.nome}, Últimos Resultados: {self.ultimos_resultados}, Crupiê: {self.nome_crupie}"
 
     def verificar_padrao(self):
-        print("Verifiquei: ", self.__str__())
         resultado = ''
         if self.verificar_padrao_vermelho():
             resultado += 'Números Vermelhos\n'
@@ -110,7 +109,7 @@ class Mesa:
                              duration="short")
         notificacao.set_audio(audio.Default, loop="False")
         notificacao.show()
-        # print("Notifiquei", self.__str__())
+        print("Notifiquei", self.__str__())
         self.ultimos_resultados = [-1]    
 
     # def notificar(self, entrada: str):

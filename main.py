@@ -17,6 +17,8 @@ def criarMesas(navegador: webdriver.Chrome, nomes_das_mesas, nomes_dos_croupier)
       mesas.append(Mesa(nomes_das_mesas[contador],resultados,nomes_dos_croupier[contador]))
       contador += 1
       resultados = []
+  # for mesa in mesas:
+  #   print(mesa.__str__())
 
 def atualizarMesas(navegador: webdriver.Chrome, nomes_dos_croupier):
   contador = 0
@@ -24,12 +26,11 @@ def atualizarMesas(navegador: webdriver.Chrome, nomes_dos_croupier):
   resultados = []
   for resultados_passados in total_de_resultados_anteriores:
     resultados.append(resultados_passados)
-    if(len(resultados) == 9): #and "Auto Roulette" not in nomes_dos_croupier[contador]): #and nomes_dos_croupier[contador] != nomes_dos_croupier[contador-1]):
-      for i in range(len(mesas)):
-        if resultados[0] != mesas[i].ultimos_resultados[0]:
-          mesas[i].ultimos_resultados.insert(0, resultados[0])
-        if(i == contador and "Auto Roulette" not in mesas[i].nome and nomes_dos_croupier[i] != nomes_dos_croupier[i-1]):
-          mesas[i].verificar_padrao()
+    if(len(resultados) == 9):
+      if resultados[0] != mesas[contador].ultimos_resultados[0]:
+        mesas[contador].ultimos_resultados.insert(0, resultados[0])
+      if("Auto Roulette" not in mesas[contador].nome and nomes_dos_croupier[contador] != nomes_dos_croupier[contador-1]):
+        mesas[contador].verificar_padrao()
       contador += 1
       resultados = []
 
@@ -71,7 +72,7 @@ def ir_para_roletas():
   navegador.find_element('xpath', '//*[@id="root"]/div/div[3]/div[1]/div[1]/div[1]/div/div[2]/div[2]/div/div/div/div[5]').click()
   sleep(10)
   
-constantes.exibir_notificacao()
+# constantes.exibir_notificacao()
 abrir_navegador()
 ir_para_login()
 fazer_login()
