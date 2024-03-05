@@ -34,7 +34,6 @@ class Mesa:
     def nome_croupier(self):
         return self._nome_croupier
 
-
     @nome_croupier.setter
     def nome_croupier(self, value):
         self._nome_croupier = value
@@ -44,64 +43,21 @@ class Mesa:
 
     def verificar_padrao(self):
         resultado = ''
-        if self.verificar_padrao_vermelho():
+        if all(numero in constantes.NUMEROS_VERMELHOS for numero in self.ultimos_resultados):
             resultado += 'Números Vermelhos\n'
-        if self.verificar_padrao_preto():
+        if all(numero in constantes.NUMEROS_PRETOS for numero in self.ultimos_resultados):
             resultado += 'Números Pretos\n'
-        if self.verificar_padrao_par():
+        if all(numero in constantes.NUMEROS_PARES for numero in self.ultimos_resultados):
             resultado += 'Números Pares\n'
-        if self.verificar_padrao_impar():
+        if all(numero in constantes.NUMEROS_IMPARES for numero in self.ultimos_resultados):
             resultado += 'Números Impares\n'
-        if self.verificar_padrao_alto():
+        if all(numero in constantes.NUMEROS_ALTOS for numero in self.ultimos_resultados):
             resultado += 'Números Altos\n'
-        if self.verificar_padrao_baixo():
+        if all(numero in constantes.NUMEORS_BAIXOS for numero in self.ultimos_resultados):
             resultado += 'Números Baixos\n'
         if resultado != '':
             self.notificar(resultado)
 
-
-    def verificar_padrao_vermelho(self):
-        contador = 0
-        for numero in self.ultimos_resultados:
-            if numero in constantes.NUMEROS_VERMELHOS:
-                contador += 1
-        return contador == constantes.QUANTIDADE_PADRAO
-    
-    def verificar_padrao_preto(self):
-        contador = 0
-        for numero in self.ultimos_resultados:
-            if numero in constantes.NUMEROS_PRETOS:
-                contador += 1
-        return contador == constantes.QUANTIDADE_PADRAO
-    
-    def verificar_padrao_par(self):
-        contador = 0
-        for numero in self.ultimos_resultados:
-            if numero in constantes.NUMEROS_PARES:
-                contador += 1
-        return contador == constantes.QUANTIDADE_PADRAO
-    
-    def verificar_padrao_impar(self):
-        contador = 0
-        for numero in self.ultimos_resultados:
-            if numero in constantes.NUMEROS_IMPARES:
-                contador += 1
-        return contador == constantes.QUANTIDADE_PADRAO
-    
-    def verificar_padrao_baixo(self):
-        contador = 0
-        for numero in self.ultimos_resultados:
-            if numero in constantes.NUMEORS_BAIXOS:
-                contador += 1
-        return contador == constantes.QUANTIDADE_PADRAO
-    
-    def verificar_padrao_alto(self):
-        contador = 0
-        for numero in self.ultimos_resultados:
-            if numero in constantes.NUMEROS_ALTOS:
-                contador += 1
-        return contador == constantes.QUANTIDADE_PADRAO
-            
     def notificar(self, entrada: str):
         notificacao = Notification(app_id="Bot BetFair", 
                              title="Entrada Encontrada", 
@@ -110,7 +66,49 @@ class Mesa:
         notificacao.set_audio(audio.Default, loop="False")
         notificacao.show()
         print("Notifiquei", self.__str__())
-        self.ultimos_resultados = [-1]    
+        self.ultimos_resultados = [-1]  
+
+    # def verificar_padrao_vermelho(self):
+    #     contador = 0
+    #     for numero in self.ultimos_resultados:
+    #         if numero in constantes.NUMEROS_VERMELHOS:
+    #             contador += 1
+    #     return contador == constantes.QUANTIDADE_PADRAO
+    
+    # def verificar_padrao_preto(self):
+    #     contador = 0
+    #     for numero in self.ultimos_resultados:
+    #         if numero in constantes.NUMEROS_PRETOS:
+    #             contador += 1
+    #     return contador == constantes.QUANTIDADE_PADRAO
+    
+    # def verificar_padrao_par(self):
+    #     contador = 0
+    #     for numero in self.ultimos_resultados:
+    #         if numero in constantes.NUMEROS_PARES:
+    #             contador += 1
+    #     return contador == constantes.QUANTIDADE_PADRAO
+    
+    # def verificar_padrao_impar(self):
+    #     contador = 0
+    #     for numero in self.ultimos_resultados:
+    #         if numero in constantes.NUMEROS_IMPARES:
+    #             contador += 1
+    #     return contador == constantes.QUANTIDADE_PADRAO
+    
+    # def verificar_padrao_baixo(self):
+    #     contador = 0
+    #     for numero in self.ultimos_resultados:
+    #         if numero in constantes.NUMEORS_BAIXOS:
+    #             contador += 1
+    #     return contador == constantes.QUANTIDADE_PADRAO
+    
+    # def verificar_padrao_alto(self):
+    #     contador = 0
+    #     for numero in self.ultimos_resultados:
+    #         if numero in constantes.NUMEROS_ALTOS:
+    #             contador += 1
+    #     return contador == constantes.QUANTIDADE_PADRAO
 
     # def notificar(self, entrada: str):
     #     notificacao = ToastNotifier()
