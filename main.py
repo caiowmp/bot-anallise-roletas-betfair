@@ -29,7 +29,9 @@ def atualizarMesas(navegador: webdriver.Chrome, nomes_dos_croupier):
     if(len(resultados) == 9):
       if resultados[0] != mesas[contador].ultimos_resultados[0]:
         mesas[contador].ultimos_resultados.insert(0, resultados[0])
-      if("Auto Roulette" not in mesas[contador].nome and nomes_dos_croupier[contador] != nomes_dos_croupier[contador-1]):
+      if("Auto Roulette" not in mesas[contador].nome 
+      and nomes_dos_croupier[contador] != nomes_dos_croupier[contador-1]
+      and len(mesas[contador].ultimos_resultados) == constantes.QUANTIDADE_PADRAO):
         mesas[contador].verificar_padrao()
       contador += 1
       resultados = []
@@ -71,7 +73,8 @@ def ir_para_roletas():
   sleep(10)
   navegador.find_element('xpath', '//*[@id="root"]/div/div[3]/div[1]/div[1]/div[1]/div/div[2]/div[2]/div/div/div/div[5]').click()
   sleep(10)
-  
+
+# print(constantes.QUANTIDADE_PADRAO)
 # constantes.exibir_notificacao()
 abrir_navegador()
 ir_para_login()
